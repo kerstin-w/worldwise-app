@@ -47,6 +47,11 @@ function Form() {
 
       <div className={styles.buttons}>
         <Button type="primary">Add</Button>
+        {/* Rendering a Button component with a type of "back" and an onClick 
+        event handler. When this button is clicked, it prevents the default 
+        behavior of the event and then uses the navigate function from the 
+        react-router-dom library to go back one step in the navigation history (-1).
+        */}
         <Button
           type="back"
           onClick={(e) => {
