@@ -5,11 +5,9 @@ import { convertToEmoji } from "../../utilities/convertToEmoji";
 
 import styles from "./Form.module.css";
 import Button from "../Button/Button";
-import { useNavigate } from "react-router-dom";
+import BackButton from "../BackButton/BackButton";
 
 function Form() {
-  const navigate = useNavigate();
-
   const [cityName, setCityName] = useState("");
   const [country, setCountry] = useState("");
   const [date, setDate] = useState(new Date());
@@ -52,15 +50,7 @@ function Form() {
         behavior of the event and then uses the navigate function from the 
         react-router-dom library to go back one step in the navigation history (-1).
         */}
-        <Button
-          type="back"
-          onClick={(e) => {
-            e.preventDefault();
-            navigate(-1);
-          }}
-        >
-          &larr; Back
-        </Button>
+        <BackButton />
       </div>
     </form>
   );

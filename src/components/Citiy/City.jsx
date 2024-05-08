@@ -4,6 +4,7 @@ import useCities from "../../hooks/useCities";
 
 import styles from "./City.module.css";
 import Spinner from "../Spinner/Spinner";
+import BackButton from "../BackButton/BackButton";
 
 /**
  * The `formatDate` function formats a given date into a string with the day, month, year, and weekday
@@ -57,7 +58,9 @@ function City() {
           Check out {cityName} on Wikipedia &rarr;
         </a>
       </div>
-      <div></div>
+      <div>
+        <BackButton />
+      </div>
     </div>
   );
 }
