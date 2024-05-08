@@ -3,6 +3,7 @@ import { useParams, useSearchParams } from "react-router-dom";
 import useCities from "../../hooks/useCities";
 
 import styles from "./City.module.css";
+import Spinner from "../Spinner/Spinner";
 
 /**
  * The `formatDate` function formats a given date into a string with the day, month, year, and weekday
@@ -18,13 +19,15 @@ const formatDate = (date) =>
 
 function City() {
   const { id } = useParams();
-  const { getCity, currentCity } = useCities();
+  const { getCity, currentCity, isLoading } = useCities();
 
   useEffect(() => {
     getCity(id);
   }, [id]);
 
   const { cityName, emoji, date, notes } = currentCity;
+
+  if (isLoading) return <Spinner />;
 
   return (
     <div className={styles.city}>
