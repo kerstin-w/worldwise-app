@@ -5,6 +5,11 @@ import Footer from "../Footer/Footer";
 import Logo from "../Logo/Logo";
 import styles from "./SideBar.module.css";
 
+/**
+ * The SideBar represents part of the layout. It includes the Logo
+ * component, AppNav component, Outlet component (used for nested routing),
+ * and Footer component all wrapped inside a div element
+ */
 function SideBar() {
   return (
     <div className={styles.sidebar}>
