@@ -1,10 +1,10 @@
 // "https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=0&longitude=0"
 
 import { useState } from "react";
-import { convertToEmoji } from "../utilities/convertToEmoji";
+import { convertToEmoji } from "../../utilities/convertToEmoji";
 
 import styles from "./Form.module.css";
-import Button from "./Button";
+import Button from "../Button/Button";
 import { useNavigate } from "react-router-dom";
 
 function Form() {
