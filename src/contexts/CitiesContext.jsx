@@ -118,6 +118,7 @@ function CitiesProvider({ children }) {
    */
   async function createCity(newCity) {
     dispatch({ type: "loading" });
+
     try {
       const res = await fetch(`${BASE_URL}/cities`, {
         method: "POST",
@@ -127,11 +128,12 @@ function CitiesProvider({ children }) {
         },
       });
       const data = await res.json();
-      dispatch({ tye: "city/created", payload: data });
+
+      dispatch({ type: "city/created", payload: data });
     } catch {
       dispatch({
         type: "rejected",
-        payload: "There was an error creating the city.",
+        payload: "There was an error creating the city...",
       });
     }
   }
@@ -160,8 +162,8 @@ function CitiesProvider({ children }) {
       value={{
         cities,
         isLoading,
-        error,
         currentCity,
+        error,
         getCity,
         createCity,
         deleteCity,
