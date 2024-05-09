@@ -1,6 +1,10 @@
 import { createContext, useEffect, useReducer } from "react";
+import process from "process";
 
-const BASE_URL = "http://localhost:9000";
+const BASE_URL =
+  process.env.NODE_ENV === "production"
+    ? "https://my-json-server.typicode.com/kerstin-w/worldwise-app"
+    : "http://localhost:9000";
 
 export const CitiesContext = createContext();
 
