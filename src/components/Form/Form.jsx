@@ -3,11 +3,15 @@
 import { useState } from "react";
 import { convertToEmoji } from "../../utilities/convertToEmoji";
 
+import { useUrlPosition } from "../../hooks/useUrlPosition";
+
 import styles from "./Form.module.css";
 import Button from "../Button/Button";
 import BackButton from "../BackButton/BackButton";
 
 function Form() {
+  const [mapLat, mapLng] = useUrlPosition();
+
   const [cityName, setCityName] = useState("");
   const [country, setCountry] = useState("");
   const [date, setDate] = useState(new Date());
