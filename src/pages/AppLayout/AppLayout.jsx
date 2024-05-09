@@ -1,12 +1,14 @@
+import styles from "./Applayout.module.css";
 import SideBar from "../../components/SideBar/SideBar";
 import Map from "../../components/Map/Map";
-import styles from "./Applayout.module.css";
+import User from "../../components/User/User";
 
 function AppLayout() {
   return (
     <div className={styles.app}>
       <SideBar />
       <Map />
+      <User />
     </div>
   );
 }
