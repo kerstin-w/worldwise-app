@@ -1,54 +1,124 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useReducer, useState } from "react";
 
 const BASE_URL = "http://localhost:9000";
 
 export const CitiesContext = createContext();
 
+/**
+ * The reducer function handles different action types to update the state in a JavaScript React
+ * application.
+ * @returns The reducer function returns a new state object based on the action type provided. The
+ * state object is updated with the changes specified in each case of the switch statement depending on
+ * the action type.
+ */
+function reducer(state, action) {
+  switch (action.type) {
+    case "loading":
+      return { ...state, isLoading: true };
+
+    case "cities/loaded":
+      return {
+        ...state,
+        isLoading: false,
+        cities: action.payload,
+      };
+
+    case "city/loaded":
+      return { ...state, isLoading: false, currentCity: action.payload };
+
+    case "city/created":
+      return {
+        ...state,
+        isLoading: false,
+        cities: [...state.cities, action.payload],
+        currentCity: action.payload,
+      };
+
+    case "city/deleted":
+      return {
+        ...state,
+        isLoading: false,
+        cities: state.cities.filter((city) => city.id !== action.payload),
+        currentCity: {},
+      };
+
+    case "rejected":
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload,
+      };
+
+    default:
+      throw new Error("Unknown action type");
+  }
+}
+
+const initialState = {
+  cities: [],
+  isLoading: false,
+  currentCity: {},
+  erro: "",
+};
+
+/**
+ * The `CitiesProvider` is a component that manages city data, including fetching, creating,
+ * and deleting cities, and provides this data to its children components through a
+ * context.
+ * @returns The `CitiesProvider` component is returning a `CitiesContext.Provider` component with the
+ * following context values provided:
+ * - `cities`: An array of cities
+ * - `isLoading`: A boolean indicating if data is currently being loaded
+ * - `error`: A string containing any error message
+ * - `currentCity`: An object representing the currently selected city
+ * - `getCity`: A function to asynchronously fetch city
+ */
 function CitiesProvider({ children }) {
-  const [cities, setCities] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [currentCity, setCurrentCity] = useState({});
+  const [{ cities, isLoading, currentCity, error }, dispatch] = useReducer(
+    reducer,
+    initialState
+  );
 
   useEffect(function () {
     async function fetchCities() {
+      dispatch({ type: "loading" });
       try {
-        setIsLoading(true);
         const res = await fetch(`${BASE_URL}/cities`);
         const data = await res.json();
-        setCities(data);
+        dispatch({ type: "cities/loaded", payload: data });
       } catch {
-        alert("Failed to fetch data");
-      } finally {
-        setIsLoading(false);
+        dispatch({ type: "rejected", payload: "Failed to fetch data" });
       }
     }
     fetchCities();
   }, []);
 
   /**
-   * The function `getCity` asynchronously fetches city data based on the provided ID, handling loading
-   * states and error alerts.
+   * The function `getCity` asynchronously fetches city data based on an ID and dispatches actions based
+   * on the result.
    */
   async function getCity(id) {
+    if (Number(id) === currentCity.id) return;
+    dispatch({ type: "loading" });
     try {
-      setIsLoading(true);
       const res = await fetch(`${BASE_URL}/cities/${id}`);
       const data = await res.json();
-      setCurrentCity(data);
+      dispatch({ type: "city/loaded", payload: data });
     } catch {
-      alert("Failed city to fetch data");
-    } finally {
-      setIsLoading(false);
+      dispatch({
+        type: "rejected",
+        payload: "There was an error loading the city.",
+      });
     }
   }
 
   /**
-   * The function `createCity` sends a POST request to a specified URL with a new city object, handles
-   * the response data, and updates the loading state accordingly.
+   * The function `createCity` asynchronously sends a POST request to a specified URL to create a new
+   * city, dispatching loading, success, or error actions based on the response.
    */
   async function createCity(newCity) {
+    dispatch({ type: "loading" });
     try {
-      setIsLoading(true);
       const res = await fetch(`${BASE_URL}/cities`, {
         method: "POST",
         body: JSON.stringify(newCity),
@@ -57,25 +127,31 @@ function CitiesProvider({ children }) {
         },
       });
       const data = await res.json();
-      setCities((cities) => [...cities, data]);
+      dispatch({ tye: "city/created", payload: data });
     } catch {
-      alert("Failed city to fetch data");
-    } finally {
-      setIsLoading(false);
+      dispatch({
+        type: "rejected",
+        payload: "There was an error creating the city.",
+      });
     }
   }
 
+  /**
+   * The function `deleteCity` asynchronously deletes a city by sending a DELETE request to the specified
+   * URL and dispatches actions based on the outcome.
+   */
   async function deleteCity(id) {
+    dispatch({ type: "loading" });
     try {
-      setIsLoading(true);
       await fetch(`${BASE_URL}/cities/${id}`, {
         method: "DELETE",
       });
-      setCities((cities) => cities.filter((city) => city.id !== id));
+      dispatch({ type: "city/deleted", payload: id });
     } catch {
-      alert("There was an error deleting city");
-    } finally {
-      setIsLoading(false);
+      dispatch({
+        type: "rejected",
+        payload: "There was an error deleting the city.",
+      });
     }
   }
 
@@ -84,6 +160,7 @@ function CitiesProvider({ children }) {
       value={{
         cities,
         isLoading,
+        error,
         currentCity,
         getCity,
         createCity,
