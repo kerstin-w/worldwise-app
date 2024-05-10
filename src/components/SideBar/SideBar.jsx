@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import AppNav from "../AppNav/AppNav";
 import Footer from "../Footer/Footer";
 import Logo from "../Logo/Logo";
-import styles from "./SideBar.module.css";
+import styles from "@/components/SideBar/SideBar.module.css";
 
 /**
  * The SideBar represents part of the layout. It includes the Logo
