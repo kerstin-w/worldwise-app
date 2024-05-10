@@ -5,9 +5,13 @@ import eslint from "vite-plugin-eslint";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), eslint()],
-  build: {
-    rollupOptions: {
-      external: /^src\/.*\.module\.css$/, // Matches all CSS module files under src directory
+
+  // Add debug output here
+  configureServer: {
+    hmr: {
+      onModuleReplacement({ file }) {
+        console.log(`[HMR] ${file} updated.`);
+      },
     },
   },
 });
