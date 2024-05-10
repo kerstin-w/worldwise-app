@@ -4,14 +4,10 @@ import eslint from "vite-plugin-eslint";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), eslint()],
-
-  // Add debug output here
-  configureServer: {
-    hmr: {
-      onModuleReplacement({ file }) {
-        console.log(`[HMR] ${file} updated.`);
-      },
+  plugins: [eslint(), react()],
+  resolve: {
+    alias: {
+      "@": new URL("src", import.meta.url).pathname,
     },
   },
 });
