@@ -1,5 +1,7 @@
 import { NavLink } from "react-router-dom";
 
+import useAuth from "../../hooks/useAuth";
+
 import styles from "./PageNav.module.css";
 import Logo from "../Logo/Logo";
 
@@ -11,6 +13,7 @@ import Logo from "../Logo/Logo";
  * a call-to-action button.
  */
 function PageNav() {
+  const { user } = useAuth();
   return (
     <nav className={styles.nav}>
       <Logo />
@@ -22,9 +25,13 @@ function PageNav() {
           <NavLink to="/product">Product</NavLink>
         </li>
         <li>
-          <NavLink to="/login" className={styles.ctaLink}>
-            Login
-          </NavLink>
+          {user ? (
+            <p className={styles.ctaLink}>Logged in</p>
+          ) : (
+            <NavLink to="/login" className={styles.ctaLink}>
+              Login
+            </NavLink>
+          )}
         </li>
       </ul>
     </nav>

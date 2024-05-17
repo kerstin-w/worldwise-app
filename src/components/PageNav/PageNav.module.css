@@ -12,7 +12,8 @@
 }
 
 .nav a:link,
-.nav a:visited {
+.nav a:visited,
+p.ctaLink {
   text-decoration: none;
   color: var(--color-light--2);
   text-transform: uppercase;
@@ -48,7 +49,8 @@
 }
 
 a.ctaLink:link,
-a.ctaLink:visited {
+a.ctaLink:visited,
+p.ctaLink {
   background-color: var(--color-brand--2);
   color: var(--color-dark--0);
   padding: 0.8rem 2rem;
