@@ -1,4 +1,4 @@
-import { createContext, useEffect, useReducer } from "react";
+import { createContext, useCallback, useEffect, useReducer } from "react";
 import process from "process";
 
 const BASE_URL =
@@ -98,23 +98,26 @@ function CitiesProvider({ children }) {
   }, []);
 
   /**
-   * The function `getCity` asynchronously fetches city data based on an ID and dispatches actions based
-   * on the result.
-   */
-  async function getCity(id) {
-    if (Number(id) === currentCity.id) return;
-    dispatch({ type: "loading" });
-    try {
-      const res = await fetch(`${BASE_URL}/cities/${id}`);
-      const data = await res.json();
-      dispatch({ type: "city/loaded", payload: data });
-    } catch {
-      dispatch({
-        type: "rejected",
-        payload: "There was an error loading the city.",
-      });
-    }
-  }
+   * The `getCity` function defined using `useCallback` is responsible for asynchronously
+   * fetching city data based on an ID and dispatches actions based on the result
+   * */
+  const getCity = useCallback(
+    async function getCity(id) {
+      if (Number(id) === currentCity.id) return;
+      dispatch({ type: "loading" });
+      try {
+        const res = await fetch(`${BASE_URL}/cities/${id}`);
+        const data = await res.json();
+        dispatch({ type: "city/loaded", payload: data });
+      } catch {
+        dispatch({
+          type: "rejected",
+          payload: "There was an error loading the city.",
+        });
+      }
+    },
+    [currentCity.id]
+  );
 
   /**
    * The function `createCity` asynchronously sends a POST request to a specified URL to create a new
